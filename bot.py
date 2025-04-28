@@ -18,7 +18,7 @@ ASK_NAME, ASK_AGE, ASK_GOAL = range(3)
 ADMIN_CHAT_ID = int(os.getenv('ADMIN_CHAT_ID'))  # ← сюда вставь свой ID
 
 # Функция записи в Google Sheets
-def write_to_google_sheet(full_name, age, goal):
+def write_to_google_sheet(full_name, age, goal, profile_link):
     credentials_json = os.getenv('GOOGLE_CREDENTIALS_JSON')
     credentials_dict = json.loads(credentials_json)
 

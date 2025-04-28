@@ -89,7 +89,7 @@ async def ask_goal(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"ФИО: {context.user_data['full_name']}\n"
         f"Возраст: {context.user_data['age']}\n"
         f"Цель: {context.user_data['goal']}\n\n"
-        f"Скоро мы свяжемся с вами!"
+        f"Скоро я с Вами свяжусь!"
     )
     await update.message.reply_text(summary)
 

@@ -27,12 +27,12 @@ def write_to_google_sheet(full_name, age, goal):
     creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scope)
     client = gspread.authorize(creds)
 
-client = gspread.authorize(creds)
+    client = gspread.authorize(creds)
     
-sheet = client.open('Запись на тренировки').sheet1
-now = datetime.now().strftime("%d.%m.%Y %H:%M")
-data = [now, full_name, age, goal]
-sheet.append_row(data)
+    sheet = client.open('Запись на тренировки').sheet1
+    now = datetime.now().strftime("%d.%m.%Y %H:%M")
+    data = [now, full_name, age, goal]
+    sheet.append_row(data)
 
 # Команда /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):

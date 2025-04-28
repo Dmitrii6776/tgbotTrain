@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 ASK_NAME, ASK_AGE, ASK_GOAL = range(3)
 
 # Вставь сюда свой Telegram User ID
-ADMIN_CHAT_ID = 'DMIN_CHAT_ID'  # ← сюда вставь свой ID
+ADMIN_CHAT_ID = int(os.getenv('ADMIN_CHAT_ID'))  # ← сюда вставь свой ID
 
 # Функция записи в Google Sheets
 def write_to_google_sheet(full_name, age, goal):
@@ -95,7 +95,7 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # Основная функция запуска
 def main():
-    token = 'BOT_TOKEN'
+    token = os.getenv('BOT_TOKEN')
     app = ApplicationBuilder().token(token).build()
 
     conv_handler = ConversationHandler(

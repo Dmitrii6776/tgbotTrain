@@ -18,8 +18,11 @@ ADMIN_CHAT_ID = int(os.getenv('ADMIN_CHAT_ID'))  # ← сюда вставь с�
 # Функция записи в Google Sheets
 def write_to_google_sheet(full_name, age, goal):
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name('tgbot-458217-f3c934000e84.json', scope)
-    client = gspread.authorize(creds)
+    credentials_json = os.getenv('tgbot-458217-f3c934000e84.json')
+    credentials_dict = json.loads(credentials_json)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scope)
+
+client = gspread.authorize(creds)
     
     sheet = client.open('Запись на тренировки').sheet1
     now = datetime.now().strftime("%d.%m.%Y %H:%M")

@@ -28,7 +28,7 @@ def write_to_google_sheet(full_name, age, goal):
     client = gspread.authorize(creds)
     sheet = client.open('Запись на тренировки').sheet1
     now = datetime.now().strftime("%d.%m.%Y %H:%M")
-    data = [now, full_name, age, goal]
+    data = [now, full_name, age, goal, profile_link]
     sheet.append_row(data)
 
 # Команда /start
@@ -64,16 +64,26 @@ async def ask_age(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # Получаем цель
 async def ask_goal(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = update.message.from_user
     context.user_data['goal'] = update.message.text
 
-    # Сохраняем в Google Sheets
+    # Get user's Telegram profile info
+    user_id = user.id
+    username = user.username
+    if username:
+        profile_link = f"https://t.me/{username}"
+    else:
+        profile_link = f"tg://user?id={user_id}"  # fallback clickable link if no username
+
+    # Save to Google Sheets
     write_to_google_sheet(
         context.user_data['full_name'],
         context.user_data['age'],
-        context.user_data['goal']
+        context.user_data['goal'],
+        profile_link  # <--- Add this if you extend your sheet
     )
 
-    # Отправляем клиенту подтверждение
+    # Send confirmation to client
     summary = (
         f"✅ Бронирование принято!\n\n"
         f"ФИО: {context.user_data['full_name']}\n"
@@ -83,18 +93,18 @@ async def ask_goal(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     await update.message.reply_text(summary)
 
-    # Отправляем уведомление администратору
+    # Send notification to admin
     admin_message = (
         f"📬 Новое бронирование!\n\n"
         f"ФИО: {context.user_data['full_name']}\n"
         f"Возраст: {context.user_data['age']}\n"
-        f"Цель: {context.user_data['goal']}"
+        f"Цель: {context.user_data['goal']}\n"
+        f"Профиль: {profile_link}"
     )
-    await context.bot.send_message(chat_id=433684845, text=admin_message)
+    await context.bot.send_message(chat_id=ADMIN_CHAT_ID, text=admin_message)
 
     return ConversationHandler.END
-
-# Отмена
+    
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Бронирование отменено.')
     return ConversationHandler.END

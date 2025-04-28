@@ -5,6 +5,8 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
+import json
+from oauth2client.service_account import ServiceAccountCredentials
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
